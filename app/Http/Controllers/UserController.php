@@ -8,6 +8,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\View\View;
 
 
 class UserController extends Controller
@@ -32,6 +33,11 @@ class UserController extends Controller
     function ResetPasswordPage():view{
         return view('pages.auth.reset-pass-page');
     }
+
+    function DashboardPage():View{
+        return view('pages.dashboard.dashboard-page');
+    }
+
 
 
     function UserRegister(Request $request)
@@ -68,7 +74,7 @@ class UserController extends Controller
                 'status'=>'success',
                 'token'=>$token,
                 'message'=>'User Login successfully'
-            ],200);
+            ],200)->cookie('token',$token,60*24*30);
         }
         else{
             return response()->json([
@@ -110,8 +116,7 @@ class UserController extends Controller
             return response()->json([
                 'status'=>'success',
                 'message'=>'OTP Verification successfully',
-                'token'=>$token
-            ],200);
+            ],200)->cookie('token',$token,60*24*30);
         }
         else{
             return response()->json([
